@@ -1,0 +1,206 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema masterchef
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema masterchef
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `masterchef` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `masterchef` ;
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`ingredient`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`ingredient` (
+  `ingredient_id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `food_group_id` INT NOT NULL,
+  `cals_per_100` INT NOT NULL,
+  PRIMARY KEY (`ingredient_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`cuisine`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`cuisine` (
+  `cuisine_id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`cuisine_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`recipe`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`recipe` (
+  `recipe_id` INT NOT NULL,
+  `type` VARCHAR(100) NOT NULL,
+  `cuisine_id` INT NOT NULL,
+  `difficulty` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(200) NULL DEFAULT NULL,
+  `tip_1` VARCHAR(200) NULL DEFAULT NULL,
+  `tip_2` VARCHAR(200) NULL DEFAULT NULL,
+  `tip_3` VARCHAR(200) NULL DEFAULT NULL,
+  `cooking_time` INT NULL DEFAULT NULL,
+  `preparation_time` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`recipe_id`),
+  INDEX `recipe_cuisine_FK` (`cuisine_id` ASC) VISIBLE,
+  CONSTRAINT `recipe_cuisine_FK`
+    FOREIGN KEY (`cuisine_id`)
+    REFERENCES `masterchef`.`cuisine` (`cuisine_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`contains`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`contains` (
+  `recipe_id` INT NOT NULL,
+  `ingredient_id` INT NOT NULL,
+  `unit_of_measure` VARCHAR(100) NULL DEFAULT NULL,
+  `number` INT NULL DEFAULT NULL,
+  PRIMARY KEY (`recipe_id`, `ingredient_id`),
+  INDEX `contains_ingredient_FK` (`ingredient_id` ASC) VISIBLE,
+  CONSTRAINT `contains_ingredient_FK`
+    FOREIGN KEY (`ingredient_id`)
+    REFERENCES `masterchef`.`ingredient` (`ingredient_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `contains_recipe_FK`
+    FOREIGN KEY (`recipe_id`)
+    REFERENCES `masterchef`.`recipe` (`recipe_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`equipment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`equipment` (
+  `equipment_id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `instructions` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`equipment_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`label`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`label` (
+  `label_id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`label_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`meal_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`meal_type` (
+  `meal_type_id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`meal_type_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`recipe_equipment`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_equipment` (
+  `recipe_id` INT NOT NULL,
+  `equipment_id` INT NOT NULL,
+  PRIMARY KEY (`recipe_id`, `equipment_id`),
+  INDEX `recipe_equipment_equipment_FK` (`equipment_id` ASC) VISIBLE,
+  CONSTRAINT `recipe_equipment_equipment_FK`
+    FOREIGN KEY (`equipment_id`)
+    REFERENCES `masterchef`.`equipment` (`equipment_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `recipe_equipment_recipe_FK`
+    FOREIGN KEY (`recipe_id`)
+    REFERENCES `masterchef`.`recipe` (`recipe_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`recipe_label`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_label` (
+  `recipe_id` INT NOT NULL,
+  `label_id` INT NOT NULL,
+  PRIMARY KEY (`recipe_id`, `label_id`),
+  INDEX `recipe_label_label_FK` (`label_id` ASC) VISIBLE,
+  CONSTRAINT `recipe_label_label_FK`
+    FOREIGN KEY (`label_id`)
+    REFERENCES `masterchef`.`label` (`label_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `recipe_label_recipe_FK`
+    FOREIGN KEY (`recipe_id`)
+    REFERENCES `masterchef`.`recipe` (`recipe_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+-- -----------------------------------------------------
+-- Table `masterchef`.`recipe_meal_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_meal_type` (
+  `recipe_id` INT NOT NULL,
+  `meal_type_id` INT NOT NULL,
+  PRIMARY KEY (`recipe_id`, `meal_type_id`),
+  INDEX `recipe_meal_type_meal_type_FK` (`meal_type_id` ASC) VISIBLE,
+  CONSTRAINT `recipe_meal_type_meal_type_FK`
+    FOREIGN KEY (`meal_type_id`)
+    REFERENCES `masterchef`.`meal_type` (`meal_type_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `recipe_meal_type_recipe_FK`
+    FOREIGN KEY (`recipe_id`)
+    REFERENCES `masterchef`.`recipe` (`recipe_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
