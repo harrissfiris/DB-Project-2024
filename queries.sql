@@ -316,7 +316,7 @@ ORDER BY
 WITH competitor_ranks AS ( 
     SELECT  
         e.episode_id, 
-        SUM(CASE ch.rank 
+        SUM(CASE ch.chef_rank 
             WHEN 'Cook C' THEN 1 
             WHEN 'Cook B' THEN 2 
             WHEN 'Cook A' THEN 3 
@@ -336,7 +336,7 @@ WITH competitor_ranks AS (
 judge_ranks AS ( 
     SELECT  
         e.episode_id, 
-        SUM(CASE ch.rank 
+        SUM(CASE ch.chef_rank 
             WHEN 'Cook C' THEN 1 
             WHEN 'Cook B' THEN 2 
             WHEN 'Cook A' THEN 3 
