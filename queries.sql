@@ -51,24 +51,24 @@ JOIN
 WHERE  
     cu.cuisine_name = 'Greek' AND e.episode_year = '2021';
 
-
 #3.3
 
 SELECT  
-	ch.first_name, ch.last_name, 
-    COUNT(r.recipe_id) as recipe_count 
+    ch.first_name, 
+    ch.last_name, 
+    COUNT(r.recipe_id) AS recipe_count 
 FROM 
-	chef ch 
+    chef ch 
 JOIN 
-	specializes sp ON sp.chef_id = ch.chef_id 
+    specializes sp ON sp.chef_id = ch.chef_id 
 JOIN 
-	recipe r ON r.cuisine_id = sp.cuisine_id 
+    recipe r ON r.cuisine_id = sp.cuisine_id 
 WHERE 
-	ch.age < 30 
+    ch.age < 30 
 GROUP BY 
-	r.cuisine_id 
+    ch.chef_id 
 ORDER BY 
-	recipe_count DESC; 
+    recipe_count DESC;
 
 
 #3.4
