@@ -39,7 +39,7 @@ GROUP BY
 
 #3.2
 SELECT  
-    ch.first_name, ch.last_name, e.episode_year, cu.cuisine_name AS cuisine_name 
+    DISTINCT ch.chef_id, ch.first_name, ch.last_name, e.episode_year, cu.cuisine_name AS cuisine_name 
 FROM  
     comp_cuisine cc 
 JOIN  
@@ -47,9 +47,9 @@ JOIN
 JOIN  
     chef ch ON ch.chef_id = cc.competitor_id 
 JOIN  
-    episode e ON cas.episode_id = e.episode_id 
+    episode e ON cc.episode_id = e.episode_id 
 WHERE  
-    cu.cuisine_name = 'Italian' AND e.episode_year = '2022';
+    cu.cuisine_name = 'Greek' AND e.episode_year = '2021';
 
 
 #3.3
