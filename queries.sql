@@ -109,7 +109,7 @@ FROM
 JOIN  
     judge_participations jp2 ON jp1.episode_count = jp2.episode_count  
     AND jp1.episode_year = jp2.episode_year  
-    AND jp1.judge_id <> jp2.judge_id 
+    AND jp1.judge_id < jp2.judge_id 
 ORDER BY  
     jp1.episode_year, jp1.episode_count;
 
