@@ -82,7 +82,7 @@ WHERE ig.judge_id IS NULL;
 
 WITH judge_participations AS ( 
     SELECT  
-        ig.judge_id, ch.first_name, ch.last_name, e.year AS episode_year,  
+        ig.judge_id, ch.first_name, ch.last_name, e.episode_year AS episode_year,  
         COUNT(DISTINCT ig.episode_id) AS episode_count 
     FROM  
         is_graded ig 
