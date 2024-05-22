@@ -393,4 +393,8 @@ FROM
     food_group fg 
 LEFT JOIN  
     ingredient i ON fg.food_group_id = i.food_group_id 
-LEFT JOIN 
+LEFT JOIN  
+    contains c ON i.ingredient_id = c.ingredient_id 
+WHERE  
+    c.ingredient_id IS NULL;
+
