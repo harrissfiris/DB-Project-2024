@@ -251,7 +251,7 @@ JOIN
     yearly_participations yp2 ON yp1.cuisine_id = yp2.cuisine_id 
     AND yp1.episode_year = yp2.episode_year - 1 
 WHERE  
-    yp1.participation_count = yp2.participation_count;
+    yp1.participation_count = yp2.participation_count
 ORDER BY
 	yp1.participation_count;
 
