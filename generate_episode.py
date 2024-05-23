@@ -151,13 +151,18 @@ def generate_episode():
     print(f"  Graded pairs: {len(graded_pairs)}")
 
     conn.commit()
+
+    # Μετά τον ορισμό όλων των διαγωνιζομένων και των βαθμολογήσεων, καλείται η calculate_winner
+    cursor.execute("CALL calculate_winner(%s)", (episode_id,))
+
+    conn.commit()
     cursor.close()
     conn.close()
 
     return episode_id
 
 # Use the function
-for _ in range(50):
+for _ in range(5):
     new_episode_id = generate_episode()
     print(f"New episode created with ID: {new_episode_id}")
 
