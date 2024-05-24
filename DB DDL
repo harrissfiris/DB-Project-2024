@@ -1,5 +1,3 @@
--- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -10,6 +8,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema masterchef
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `masterchef` ;
 
 -- -----------------------------------------------------
 -- Schema masterchef
@@ -20,6 +19,8 @@ USE `masterchef` ;
 -- -----------------------------------------------------
 -- Table `masterchef`.`picture`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`picture` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`picture` (
   `picture_id` INT NOT NULL AUTO_INCREMENT,
   `description` TEXT NOT NULL,
@@ -35,6 +36,8 @@ CREATE UNIQUE INDEX `picture_unique` ON `masterchef`.`picture` (`picture_id` ASC
 -- -----------------------------------------------------
 -- Table `masterchef`.`chef`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`chef` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`chef` (
   `chef_id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(100) NOT NULL,
@@ -64,10 +67,14 @@ CREATE INDEX `chef_chef_id_IDX` USING BTREE ON `masterchef`.`chef` (`chef_id`, `
 
 CREATE INDEX `chef_picture_FK` ON `masterchef`.`chef` (`picture_id` ASC) VISIBLE;
 
+CREATE INDEX `chef_chef_rank_IDX` USING BTREE ON `masterchef`.`chef` (`chef_rank`) VISIBLE;
+
 
 -- -----------------------------------------------------
 -- Table `masterchef`.`food_group`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`food_group` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`food_group` (
   `food_group_id` INT NOT NULL AUTO_INCREMENT,
   `food_group_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -93,6 +100,8 @@ CREATE INDEX `food_group_picture_FK` ON `masterchef`.`food_group` (`picture_id` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`ingredient`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`ingredient` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`ingredient` (
   `ingredient_id` INT NOT NULL AUTO_INCREMENT,
   `ingredient_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -127,6 +136,8 @@ CREATE INDEX `ingredient_picture_FK` ON `masterchef`.`ingredient` (`picture_id` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`cuisine`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`cuisine` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`cuisine` (
   `cuisine_id` INT NOT NULL AUTO_INCREMENT,
   `cuisine_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -150,6 +161,8 @@ CREATE INDEX `cuisine_picture_FK` ON `masterchef`.`cuisine` (`picture_id` ASC) V
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe` (
   `recipe_id` INT NOT NULL AUTO_INCREMENT,
   `recipe_type` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -200,10 +213,16 @@ CREATE INDEX `recipe_recipe_id_IDX` USING BTREE ON `masterchef`.`recipe` (`recip
 
 CREATE INDEX `recipe_picture_FK` ON `masterchef`.`recipe` (`picture_id` ASC) VISIBLE;
 
+CREATE INDEX `recipe_carbs_g_IDX` USING BTREE ON `masterchef`.`recipe` (`carbs_g`) VISIBLE;
+
+CREATE INDEX `recipe_difficulty_IDX` USING BTREE ON `masterchef`.`recipe` (`difficulty`) VISIBLE;
+
 
 -- -----------------------------------------------------
 -- Table `masterchef`.`contains`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`contains` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`contains` (
   `recipe_id` INT NOT NULL,
   `ingredient_id` INT NOT NULL,
@@ -230,6 +249,8 @@ CREATE INDEX `contains_ingredient_FK` ON `masterchef`.`contains` (`ingredient_id
 -- -----------------------------------------------------
 -- Table `masterchef`.`episode`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`episode` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`episode` (
   `episode_id` INT NOT NULL AUTO_INCREMENT,
   `episode_num` INT NOT NULL,
@@ -264,6 +285,8 @@ CREATE INDEX `episode_picture_FK` ON `masterchef`.`episode` (`picture_id` ASC) V
 -- -----------------------------------------------------
 -- Table `masterchef`.`equipment`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`equipment` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`equipment` (
   `equipment_id` INT NOT NULL AUTO_INCREMENT,
   `equipment_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -288,6 +311,8 @@ CREATE INDEX `equipment_picture_FK` ON `masterchef`.`equipment` (`picture_id` AS
 -- -----------------------------------------------------
 -- Table `masterchef`.`is_assigned`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`is_assigned` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`is_assigned` (
   `competitor_id` INT NOT NULL,
   `episode_id` INT NOT NULL,
@@ -318,14 +343,18 @@ CREATE INDEX `is_assigned_episode_FK` ON `masterchef`.`is_assigned` (`episode_id
 
 CREATE INDEX `is_assigned_recipe_FK` ON `masterchef`.`is_assigned` (`recipe_id` ASC) VISIBLE;
 
-CREATE INDEX `is_assigned_competitor_id_IDX` USING BTREE ON `masterchef`.`is_assigned` (`competitor_id`, `recipe_id`) VISIBLE;
+CREATE INDEX `is_assigned_competitor_recipe_IDX` USING BTREE ON `masterchef`.`is_assigned` (`competitor_id`, `recipe_id`) VISIBLE;
 
 CREATE INDEX `is_assigned_recipe_id_IDX` USING BTREE ON `masterchef`.`is_assigned` (`recipe_id`, `episode_id`) VISIBLE;
+
+CREATE INDEX `is_assigned_competitor_id_IDX` USING BTREE ON `masterchef`.`is_assigned` (`competitor_id`) VISIBLE;
 
 
 -- -----------------------------------------------------
 -- Table `masterchef`.`is_graded`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`is_graded` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`is_graded` (
   `competitor_id` INT NOT NULL,
   `judge_id` INT NOT NULL,
@@ -359,6 +388,8 @@ CREATE INDEX `is_graded_chef_FK_1` ON `masterchef`.`is_graded` (`judge_id` ASC) 
 -- -----------------------------------------------------
 -- Table `masterchef`.`label`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`label` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`label` (
   `label_id` INT NOT NULL AUTO_INCREMENT,
   `label_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -382,6 +413,8 @@ CREATE INDEX `label_picture_FK` ON `masterchef`.`label` (`picture_id` ASC) VISIB
 -- -----------------------------------------------------
 -- Table `masterchef`.`meal_type`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`meal_type` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`meal_type` (
   `meal_type_id` INT NOT NULL AUTO_INCREMENT,
   `meal_type_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -405,6 +438,8 @@ CREATE INDEX `meal_type_picture_FK` ON `masterchef`.`meal_type` (`picture_id` AS
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe_calories`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe_calories` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_calories` (
   `recipe_id` INT NOT NULL,
   `calorie_number` INT NOT NULL,
@@ -422,6 +457,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe_equipment`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe_equipment` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_equipment` (
   `recipe_id` INT NOT NULL,
   `equipment_id` INT NOT NULL,
@@ -446,6 +483,8 @@ CREATE INDEX `recipe_equipment_equipment_FK` ON `masterchef`.`recipe_equipment` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe_label`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe_label` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_label` (
   `recipe_id` INT NOT NULL,
   `label_id` INT NOT NULL,
@@ -470,6 +509,8 @@ CREATE INDEX `recipe_label_label_FK` ON `masterchef`.`recipe_label` (`label_id` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe_meal_type`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe_meal_type` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_meal_type` (
   `recipe_id` INT NOT NULL,
   `meal_type_id` INT NOT NULL,
@@ -494,6 +535,8 @@ CREATE INDEX `recipe_meal_type_meal_type_FK` ON `masterchef`.`recipe_meal_type` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`them_unit`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`them_unit` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`them_unit` (
   `them_unit_id` INT NOT NULL AUTO_INCREMENT,
   `them_unit_name` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
@@ -518,6 +561,8 @@ CREATE INDEX `them_unit_picture_FK` ON `masterchef`.`them_unit` (`picture_id` AS
 -- -----------------------------------------------------
 -- Table `masterchef`.`recipe_them_unit`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`recipe_them_unit` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`recipe_them_unit` (
   `recipe_id` INT NOT NULL,
   `them_unit_id` INT NOT NULL,
@@ -542,6 +587,8 @@ CREATE INDEX `recipe_them_unit_them_unit_FK` ON `masterchef`.`recipe_them_unit` 
 -- -----------------------------------------------------
 -- Table `masterchef`.`specializes`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `masterchef`.`specializes` ;
+
 CREATE TABLE IF NOT EXISTS `masterchef`.`specializes` (
   `chef_id` INT NOT NULL,
   `cuisine_id` INT NOT NULL,
@@ -582,6 +629,9 @@ CREATE TABLE IF NOT EXISTS `masterchef`.`comp_cuisine` (`competitor_id` INT, `ep
 -- -----------------------------------------------------
 -- procedure calculate_winner
 -- -----------------------------------------------------
+
+USE `masterchef`;
+DROP procedure IF EXISTS `masterchef`.`calculate_winner`;
 
 DELIMITER $$
 USE `masterchef`$$
@@ -659,6 +709,9 @@ DELIMITER ;
 -- procedure calory_count
 -- -----------------------------------------------------
 
+USE `masterchef`;
+DROP procedure IF EXISTS `masterchef`.`calory_count`;
+
 DELIMITER $$
 USE `masterchef`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `calory_count`()
@@ -716,6 +769,9 @@ DELIMITER ;
 -- -----------------------------------------------------
 -- procedure generate_recipe_them_units
 -- -----------------------------------------------------
+
+USE `masterchef`;
+DROP procedure IF EXISTS `masterchef`.`generate_recipe_them_units`;
 
 DELIMITER $$
 USE `masterchef`$$
@@ -789,6 +845,9 @@ DELIMITER ;
 -- -----------------------------------------------------
 -- procedure update_assigned_recipe
 -- -----------------------------------------------------
+
+USE `masterchef`;
+DROP procedure IF EXISTS `masterchef`.`update_assigned_recipe`;
 
 DELIMITER $$
 USE `masterchef`$$
@@ -883,6 +942,9 @@ DELIMITER ;
 -- procedure update_info
 -- -----------------------------------------------------
 
+USE `masterchef`;
+DROP procedure IF EXISTS `masterchef`.`update_info`;
+
 DELIMITER $$
 USE `masterchef`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_info`(
@@ -929,6 +991,7 @@ DELIMITER ;
 -- View `masterchef`.`chef_info`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `masterchef`.`chef_info`;
+DROP VIEW IF EXISTS `masterchef`.`chef_info` ;
 USE `masterchef`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `masterchef`.`chef_info` AS select `masterchef`.`chef`.`chef_id` AS `chef_id`,`masterchef`.`chef`.`first_name` AS `first_name`,`masterchef`.`chef`.`last_name` AS `last_name`,`masterchef`.`chef`.`phone_number` AS `phone_number`,`masterchef`.`chef`.`birth_date` AS `birth_date`,`masterchef`.`chef`.`age` AS `age`,`masterchef`.`chef`.`years_of_exp` AS `years_of_exp`,`masterchef`.`chef`.`chef_rank` AS `chef_rank` from `masterchef`.`chef`;
 
@@ -936,6 +999,7 @@ CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY D
 -- View `masterchef`.`comp_avg_scores`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `masterchef`.`comp_avg_scores`;
+DROP VIEW IF EXISTS `masterchef`.`comp_avg_scores` ;
 USE `masterchef`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `masterchef`.`comp_avg_scores` AS select `ig`.`competitor_id` AS `competitor_id`,`ig`.`episode_id` AS `episode_id`,avg(`ig`.`grade`) AS `avg_grade`,`ia`.`recipe_id` AS `recipe_id`,`masterchef`.`recipe`.`cuisine_id` AS `cuisine_id` from ((`masterchef`.`is_graded` `ig` join `masterchef`.`is_assigned` `ia` on(((`ig`.`competitor_id` = `ia`.`competitor_id`) and (`ig`.`episode_id` = `ia`.`episode_id`)))) join `masterchef`.`recipe` on((`ia`.`recipe_id` = `masterchef`.`recipe`.`recipe_id`))) group by `ig`.`competitor_id`,`ig`.`episode_id`;
 
@@ -943,15 +1007,15 @@ CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY D
 -- View `masterchef`.`comp_cuisine`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `masterchef`.`comp_cuisine`;
+DROP VIEW IF EXISTS `masterchef`.`comp_cuisine` ;
 USE `masterchef`;
 CREATE  OR REPLACE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `masterchef`.`comp_cuisine` AS select `ia`.`competitor_id` AS `competitor_id`,`ia`.`episode_id` AS `episode_id`,`r`.`cuisine_id` AS `cuisine_id` from (`masterchef`.`is_assigned` `ia` join `masterchef`.`recipe` `r` on((`r`.`recipe_id` = `ia`.`recipe_id`)));
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 USE `masterchef`;
 
 DELIMITER $$
+
+USE `masterchef`$$
+DROP TRIGGER IF EXISTS `masterchef`.`after_insert_recipe` $$
 USE `masterchef`$$
 CREATE
 DEFINER=`root`@`localhost`
@@ -962,6 +1026,9 @@ BEGIN
     CALL calory_count; 
 END$$
 
+
+USE `masterchef`$$
+DROP TRIGGER IF EXISTS `masterchef`.`after_update_recipe` $$
 USE `masterchef`$$
 CREATE
 DEFINER=`root`@`localhost`
@@ -972,6 +1039,9 @@ BEGIN
     CALL calory_count(); 
 END$$
 
+
+USE `masterchef`$$
+DROP TRIGGER IF EXISTS `masterchef`.`after_insert_contains` $$
 USE `masterchef`$$
 CREATE
 DEFINER=`root`@`localhost`
@@ -982,6 +1052,9 @@ BEGIN
     CALL calory_count(); 
 END$$
 
+
+USE `masterchef`$$
+DROP TRIGGER IF EXISTS `masterchef`.`after_update_contains` $$
 USE `masterchef`$$
 CREATE
 DEFINER=`root`@`localhost`
@@ -994,3 +1067,7 @@ END$$
 
 
 DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
