@@ -201,7 +201,7 @@ SELECT
 FROM  
     episode e FORCE INDEX (PRIMARY) 
 JOIN  
-    is_assigned ia FORCE INDEX (is_assigned_recipe_id_IDX) ON e.episode_id = ia.episode_id 
+    is_assigned ia FORCE INDEX (is_assigned_episode_FK) ON e.episode_id = ia.episode_id 
 JOIN  
     recipe_equipment re FORCE INDEX (PRIMARY) ON ia.recipe_id = re.recipe_id 
 GROUP BY  
