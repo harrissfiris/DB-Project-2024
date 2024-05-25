@@ -1,16 +1,3 @@
-#3.1
-SELECT  
-    ch.chef_id, ch.first_name, ch.last_name, cu.cuisine_name, 
-    AVG(cas.avg_grade) AS avg_score 
-FROM  
-    comp_avg_scores cas 
-JOIN  
-    cuisine cu ON cu.cuisine_id = cas.cuisine_id 
-JOIN  
-    chef ch ON ch.chef_id = cas.competitor_id 
-GROUP BY  
-    ch.chef_id, cu.cuisine_id;
-
 #3.1a cooks
 
 SELECT 
@@ -397,4 +384,3 @@ LEFT JOIN
     contains c ON i.ingredient_id = c.ingredient_id 
 WHERE  
     c.ingredient_id IS NULL;
-
