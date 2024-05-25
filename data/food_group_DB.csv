@@ -1,9 +1,0 @@
-﻿food_group_id,food_group_name,diet_type,description,picture_id
-12001,Vegetables,"Vegan or vegetarian with small changes, Pescetarian recipes","Vegetables come in a wide variety of colors, flavors, and textures. They contain vitamins and minerals, carbohydrates, and are an important source of fiber.",20009
-12002,Fruits,Healthier sweet treat,"Fruits bring color, flavor, and important nutrients to your diet. ",20009
-12003,Grains,"High in energy, Vegan or vegetarian with small changes","Any food made from wheat, rye, rice, oats, cornmeal, barley, or other cereal grain is a grain product",20009
-12004,Dairy,Recipes with dairy,"Dairy products or milk products, also known as lacticinia, are food products made from milk. The",20009
-12005,Meat ,Foods with high protein,Meat is animal meat and is high in protein,20009
-12006,Fish,"Pesceterian recipes , Seafood",Products from fish and other sea animals,20009
-12007,Fats,High in energy,"Fats include oils, butter, olives and nuts",20009
-12008,Sugars,High in energy ,Including sugar types,20009
