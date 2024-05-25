@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `masterchef`.`picture` (
   `picture_id` INT NOT NULL AUTO_INCREMENT,
   `description` TEXT NOT NULL,
   `pic` LONGBLOB NULL DEFAULT NULL,
-  PRIMARY KEY ('picture_id'))
+  PRIMARY KEY (`picture_id`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 20001
 DEFAULT CHARACTER SET = utf8mb4
