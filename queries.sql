@@ -1,27 +1,27 @@
 #3.1a cooks
 
 SELECT 
-	c.first_name, 
+    c.first_name, 
     c.last_name, 
     AVG(cas.avg_grade) AS total_avg 
 FROM 
-	comp_avg_scores cas 
+    comp_avg_scores cas 
 JOIN 
-	chef c ON c.chef_id = cas.competitor_id 
+    chef c ON c.chef_id = cas.competitor_id 
 GROUP BY 
-	cas.competitor_id 
+    cas.competitor_id 
 
 #3.1b cuisine
 
 SELECT 
-	c.cuisine_name, 
+    c.cuisine_name, 
     AVG(cas.avg_grade) AS total_avg 
 FROM 
-	comp_avg_scores cas 
+    comp_avg_scores cas 
 JOIN 
-	cuisine c ON c.cuisine_id = cas.cuisine_id 
+    cuisine c ON c.cuisine_id = cas.cuisine_id 
 GROUP BY 
-	cas.cuisine_id 
+    cas.cuisine_id 
     
 
 #3.2
